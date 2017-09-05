@@ -15,15 +15,23 @@ def substitution(pt):
 
 
 def permutation(pt):
-    assert len(pt) == 16
+    assert len(pt) == 4
     for i in pt:
         assert i in string.hexdigits
+    pt = bin(int(pt, 4))
+    flag_list = []
     # Permutation Lookup
-    plookup_dict = {0: 0, 1: 4, 2: 8, 3: 12, 4: 13, 5: 5, 6: 9, 7: 13, 8: 2, 9: 6, 10: 10, 11: 14, 12: 3, 13: 7, 14: 11, 15: 15}
+    plookup_dict = {0: 0, 1: 4, 2: 8, 3: 12, 4: 1, 5: 5, 6: 9, 7: 13, 8: 2, 9: 6, 10: 10, 11: 14, 12: 3, 13: 7, 14: 11, 15: 15}
     # Transposition of bit indices
-    
-
-
+    for i in range(len(pt)):
+        if i not in flag_list:
+            temp = pt[i]
+            pt = pt[:i] + pt[plookup_dict[i]] + pt[i+1:]
+            pt = pt[:plookup_dict[i]] + temp + pt[plookup_dict[i]+1:]
+            flag_list.append(temp)
+            flag_list.append(plookup_dict[i])
+        else:
+            continue
 
 if __name__ == '__main__':
     plaintext = raw_input("Enter the text you want to encrypt: ")
