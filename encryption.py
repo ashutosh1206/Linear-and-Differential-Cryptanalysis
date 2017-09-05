@@ -18,7 +18,7 @@ def permutation(pt):
     assert len(pt) == 4
     for i in pt:
         assert i in string.hexdigits
-    pt = bin(int(pt, 4))
+    pt = bin(int(pt, 16))
     flag_list = []
     # Permutation Lookup
     plookup_dict = {0: 0, 1: 4, 2: 8, 3: 12, 4: 1, 5: 5, 6: 9, 7: 13, 8: 2, 9: 6, 10: 10, 11: 14, 12: 3, 13: 7, 14: 11, 15: 15}
@@ -32,6 +32,26 @@ def permutation(pt):
             flag_list.append(plookup_dict[i])
         else:
             continue
+    return pt
+
+
+def xor(pt):
+    assert len(pt) == 4
+    key = urandom(4)
+    ct = ""
+    for i in range(len(pt)):
+        ct += chr(ord(key[i]) ^ int(pt[i], 16))
+    return ct.encode("hex")
+
+
+def encrypt(plaintext):
+    plaintext = plaintext.encode("hex")
+    for i in range(0, len(plaintext), 4):
+        for j in range(4):
+            plaintext = substitution(plaintext[i:i+4]) + plaintext[i+5:]
+            plaintext = permutation(plaintext[i:i+4]) + plaintext[i+5:]
+            plaintext = xor(plaintext)
+
 
 if __name__ == '__main__':
-    plaintext = raw_input("Enter the text you want to encrypt: ")
+    text = raw_input("Enter the text you want to encrypt: ")
