@@ -18,7 +18,7 @@ def permutation(pt):
     assert len(pt) == 4
     for i in pt:
         assert i in string.hexdigits
-    pt = bin(int(pt, 16))
+    pt = ''.join([(bin(int(pt[i],16))[2:]).zfill(4) for i in range(len(pt))])
     flag_list = []
     # Permutation Lookup
     plookup_dict = {0: 0, 1: 4, 2: 8, 3: 12, 4: 1, 5: 5, 6: 9, 7: 13, 8: 2, 9: 6, 10: 10, 11: 14, 12: 3, 13: 7, 14: 11, 15: 15}
@@ -27,12 +27,12 @@ def permutation(pt):
         if i not in flag_list:
             temp = pt[i]
             pt = pt[:i] + pt[plookup_dict[i]] + pt[i+1:]
-            pt = pt[:plookup_dict[i]] + temp + pt[plookup_dict[i]+1:]
+            pt = pt[:plookup_dict[i]] + temp + pt[(plookup_dict[i]+1):]
             flag_list.append(temp)
             flag_list.append(plookup_dict[i])
         else:
             continue
-    return pt
+    return (hex(int(pt,2))[2:])
 
 
 def xor(pt):
@@ -47,13 +47,15 @@ def xor(pt):
 
 def encrypt(plaintext):
     plaintext = plaintext.encode("hex")
-    for i in range(0, len(plaintext), 4):
+    temp = plaintext
+    for i in range(0, len(temp), 4):
         for j in range(4):
-            plaintext = xor(plaintext)
+            plaintext = plaintext[:i] + xor(plaintext[i:i+4]) + plaintext[i+4:]
             plaintext = plaintext[:i] + substitution(plaintext[i:i+4]) + plaintext[i+4:]
             plaintext = plaintext[:i] + permutation(plaintext[i:i+4]) + plaintext[i+4:]
-        plaintext = xor(plaintext)
-
+        plaintext = plaintext[:i] + xor(plaintext[i:i+4]) + plaintext[i+4:]
+    return plaintext
 
 if __name__ == '__main__':
     text = raw_input("Enter the text you want to encrypt: ")
+    print "The corresponding ciphertext is: ", encrypt(text)
