@@ -50,8 +50,8 @@ def encrypt(plaintext):
     for i in range(0, len(plaintext), 4):
         for j in range(4):
             plaintext = xor(plaintext)
-            plaintext = substitution(plaintext[i:i+4]) + plaintext[i+5:]
-            plaintext = permutation(plaintext[i:i+4]) + plaintext[i+5:]
+            plaintext = plaintext[:i] + substitution(plaintext[i:i+4]) + plaintext[i+4:]
+            plaintext = plaintext[:i] + permutation(plaintext[i:i+4]) + plaintext[i+4:]
         plaintext = xor(plaintext)
 
 
