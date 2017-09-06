@@ -18,7 +18,7 @@ def permutation(pt):
     assert len(pt) == 4
     for i in pt:
         assert i in string.hexdigits
-    pt = ''.join([(bin(int(pt[i],16))[2:]).zfill(4) for i in range(len(pt))])
+    pt = ''.join([(bin(int(pt[i], 16))[2:]).zfill(4) for i in range(len(pt))])
     flag_list = []
     # Permutation Lookup
     plookup_dict = {0: 0, 1: 4, 2: 8, 3: 12, 4: 1, 5: 5, 6: 9, 7: 13, 8: 2, 9: 6, 10: 10, 11: 14, 12: 3, 13: 7, 14: 11, 15: 15}
@@ -32,7 +32,7 @@ def permutation(pt):
             flag_list.append(plookup_dict[i])
         else:
             continue
-    return (hex(int(pt,2))[2:])
+    return (hex(int(pt, 2))[2:]).zfill(4)
 
 
 def xor(pt):
