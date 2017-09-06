@@ -37,10 +37,11 @@ def permutation(pt):
 
 def xor(pt):
     assert len(pt) == 4
-    key = urandom(4)
+    pt = pt.decode("hex")
+    key = urandom(2)
     ct = ""
     for i in range(len(pt)):
-        ct += chr(ord(key[i]) ^ int(pt[i], 16))
+        ct += chr(ord(key[i]) ^ ord(pt[i]))
     return ct.encode("hex")
 
 
@@ -48,9 +49,10 @@ def encrypt(plaintext):
     plaintext = plaintext.encode("hex")
     for i in range(0, len(plaintext), 4):
         for j in range(4):
+            plaintext = xor(plaintext)
             plaintext = substitution(plaintext[i:i+4]) + plaintext[i+5:]
             plaintext = permutation(plaintext[i:i+4]) + plaintext[i+5:]
-            plaintext = xor(plaintext)
+        plaintext = xor(plaintext)
 
 
 if __name__ == '__main__':
